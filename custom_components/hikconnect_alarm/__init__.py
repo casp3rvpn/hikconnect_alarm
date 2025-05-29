@@ -1,19 +1,20 @@
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
-from hikconnect.api import HikConnect
+from hikconnect import HikConnect
+from .const import DOMAIN, DEFAULT_PORT
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up Hik-Connect from a config entry."""
     hass.data.setdefault(DOMAIN, {})
     
-    api = HikConnect(
-        host=entry.data["host"],
+    device = HikConnect(
+        ip=entry.data["host"],
         username=entry.data["username"],
         password=entry.data["password"],
         port=entry.data.get("port", DEFAULT_PORT)
     )
     
-    hass.data[DOMAIN][entry.entry_id] = api
+    hass.data[DOMAIN][entry.entry_id] = device
     await hass.config_entries.async_forward_entry_setups(entry, ["binary_sensor"])
     return True
 

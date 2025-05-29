@@ -1,9 +1,9 @@
 {
-  "domain": "hikconnectAlarm",
+  "domain": "hikconnect",
   "name": "Hik-Connect Local",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "documentation": "https://github.com/your-username/hikconnect-homeassistant",
-  "requirements": ["hikconnect>=0.4.0"],
+  "requirements": ["hikconnect==0.7.0"],
   "dependencies": [],
   "codeowners": ["@your-username"],
   "config_flow": true,
