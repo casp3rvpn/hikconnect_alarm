@@ -4,8 +4,8 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-import aiohttp
 import voluptuous as vol
+import aiohttp
 
 from homeassistant import config_entries
 from homeassistant.core import HomeAssistant
@@ -40,7 +40,6 @@ async def authenticate_client(
     """Authenticate with Hik-Connect and get devices list."""
     session = async_get_clientsession(hass)
     
-    # Step 1: Get access token
     auth_data = {
         "client_id": DEFAULT_APP_KEY,
         "client_secret": DEFAULT_APP_SECRET,
@@ -51,22 +50,22 @@ async def authenticate_client(
 
     try:
         async with session.post(LOGIN_URL, data=auth_data) as response:
-            if response.status != 200:
-                raise InvalidAuth
+            response.raise_for_status()
             auth_info = await response.json()
             access_token = auth_info["access_token"]
 
-        # Step 2: Get devices list
         headers = {"Authorization": f"Bearer {access_token}"}
         async with session.get(DEVICES_URL, headers=headers) as response:
-            if response.status != 200:
-                raise CannotConnect
+            response.raise_for_status()
             devices_info = await response.json()
             return access_token, devices_info["devices"]
 
     except aiohttp.ClientError as err:
         _LOGGER.error("Connection error: %s", err)
         raise CannotConnect from err
+    except Exception as err:
+        _LOGGER.error("Authentication error: %s", err)
+        raise InvalidAuth from err
 
 class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     """Handle a config flow for Hik-Connect."""
@@ -78,34 +77,40 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         """Initialize the config flow."""
         self.devices = []
         self.access_token = None
+        self.username = None
 
-    async def async_step_user(self, user_input=None):
+    async def async_step_user(
+        self, user_input: dict[str, Any] | None = None
+    ) -> FlowResult:
         """Handle the initial step."""
         errors = {}
 
         if user_input is not None:
+            self.username = user_input[CONF_USERNAME]
             try:
                 self.access_token, self.devices = await authenticate_client(
                     self.hass, user_input[CONF_USERNAME], user_input[CONF_PASSWORD]
                 )
                 return await self.async_step_device()
-
             except InvalidAuth:
                 errors["base"] = "invalid_auth"
             except CannotConnect:
                 errors["base"] = "cannot_connect"
-            except Exception:  # pylint: disable=broad-except
+            except Exception:
                 _LOGGER.exception("Unexpected exception")
                 errors["base"] = "unknown"
 
         return self.async_show_form(
-            step_id="user", data_schema=STEP_USER_DATA_SCHEMA, errors=errors
+            step_id="user",
+            data_schema=STEP_USER_DATA_SCHEMA,
+            errors=errors,
         )
 
-    async def async_step_device(self, user_input=None):
+    async def async_step_device(
+        self, user_input: dict[str, Any] | None = None
+    ) -> FlowResult:
         """Handle the device selection step."""
         if user_input is None:
-            # Show device selection form
             device_options = {
                 device["deviceSerial"]: f"{device['deviceName']} ({device['deviceSerial']})"
                 for device in self.devices
@@ -121,21 +126,19 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 }),
             )
 
-        # Get selected device details
         selected_device = next(
             device for device in self.devices
             if device["deviceSerial"] == user_input[CONF_DEVICE_SERIAL]
         )
 
-        # Check if already configured
         await self.async_set_unique_id(user_input[CONF_DEVICE_SERIAL])
         self._abort_if_unique_id_configured()
 
         return self.async_create_entry(
-            title=f"{selected_device['deviceName']}",
+            title=f"Hik-Connect: {selected_device['deviceName']}",
             data={
-                CONF_USERNAME: self.hass.data[DOMAIN].get(CONF_USERNAME),
-                CONF_PASSWORD: self.hass.data[DOMAIN].get(CONF_PASSWORD),
+                CONF_USERNAME: self.username,
+                CONF_PASSWORD: user_input[CONF_PASSWORD],
                 CONF_DEVICE_SERIAL: user_input[CONF_DEVICE_SERIAL],
                 CONF_DEVICE_NAME: selected_device["deviceName"],
             },
