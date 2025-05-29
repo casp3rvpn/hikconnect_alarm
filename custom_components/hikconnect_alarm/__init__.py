@@ -1,12 +1,12 @@
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
-from hikconnect.api import HikConnectAPI
+from hikconnect.api import HikConnect
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up Hik-Connect from a config entry."""
     hass.data.setdefault(DOMAIN, {})
     
-    api = HikConnectAPI(
+    api = HikConnect(
         host=entry.data["host"],
         username=entry.data["username"],
         password=entry.data["password"],
