@@ -2,30 +2,23 @@
   "config": {
     "step": {
       "user": {
-        "title": "Hik-Connect Authentication",
-        "description": "Enter your Hik-Connect account credentials",
+        "title": "Hik-Connect Setup",
+        "description": "Enter your device details",
         "data": {
-          "username": "Username (email or phone)",
-          "password": "Password"
-        }
-      },
-      "device": {
-        "title": "Select Device",
-        "description": "Choose which Hik-Connect device to monitor",
-        "data": {
-          "device_serial": "Available devices"
+          "host": "IP Address",
+          "username": "Username",
+          "password": "Password",
+          "port": "Port"
         }
       }
     },
     "error": {
-      "invalid_auth": "Invalid username or password",
-      "cannot_connect": "Failed to connect to Hik-Connect servers",
-      "unknown": "Unknown error occurred",
-      "no_devices": "No devices found in your account"
+      "invalid_auth": "Invalid authentication",
+      "cannot_connect": "Failed to connect to device",
+      "unknown": "Unknown error"
     },
     "abort": {
-      "already_configured": "This device is already configured",
-      "reauth_successful": "Re-authentication was successful"
+      "already_configured": "Device already configured"
     }
   }
 }

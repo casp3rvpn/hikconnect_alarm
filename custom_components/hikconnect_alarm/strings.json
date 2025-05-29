@@ -1,29 +1,11 @@
 {
+  "title": "Hik-Connect Local",
   "config": {
     "step": {
       "user": {
-        "title": "Hik-Connect Authentication",
-        "description": "Enter your Hik-Connect credentials",
-        "data": {
-          "username": "Username",
-          "password": "Password"
-        }
-      },
-      "device": {
-        "title": "Select Device",
-        "description": "Choose the device to monitor",
-        "data": {
-          "device_serial": "Device"
-        }
+        "title": "Connect to Hikvision Device",
+        "description": "Enter local access credentials for your Hikvision NVR/IP camera."
       }
-    },
-    "error": {
-      "invalid_auth": "Invalid authentication",
-      "cannot_connect": "Cannot connect to Hik-Connect",
-      "unknown": "Unknown error"
-    },
-    "abort": {
-      "already_configured": "Device is already configured"
     }
   }
 }
