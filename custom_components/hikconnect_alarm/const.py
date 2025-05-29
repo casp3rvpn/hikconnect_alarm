@@ -2,7 +2,7 @@
 DOMAIN = "hikconnectAlarm"
 DEFAULT_NAME = "Hik-Connect Alarm"
 DEFAULT_SCAN_INTERVAL = 15  # seconds
-VERSION = "0.1.0"
+VERSION = "0.1.1"
 
 # Configuration keys
 CONF_USERNAME = "username"
@@ -17,7 +17,7 @@ DEFAULT_APP_SECRET = "4c12b3e5b6a74b5d9e5337d5c1f6a7d1"
 
 # API endpoints
 API_BASE_URL = "https://api.hik-connect.com"
-LOGIN_URL = f"{API_BASE_URL}/oauth/token"
+LOGIN_URL = f"{API_BASE_URL}/v3/users/login/v2"
 DEVICES_URL = f"{API_BASE_URL}/api/v3/devices"
 ALARM_STATUS_URL = f"{API_BASE_URL}/api/v3/alarm/device/status"
 
