@@ -1,10 +1,10 @@
 {
-  "domain": "hikconnecAlarm",
+  "domain": "hikconnectAlarm",
   "name": "Hik-Connect Alarm",
-  "documentation": "https://github.com/your-github/hikconnect-homeassistant",
-  "issue_tracker": "https://github.com/your-github/hikconnect-homeassistant/issues",
+  "documentation": "https://github.com/your-username/hikconnect-homeassistant",
+  "issue_tracker": "https://github.com/your-username/hikconnect-homeassistant/issues",
   "dependencies": [],
-  "codeowners": ["@your-github"],
+  "codeowners": ["@your-username"],
   "requirements": ["aiohttp>=3.8.1"],
   "version": "1.0.0",
   "iot_class": "cloud_polling"
