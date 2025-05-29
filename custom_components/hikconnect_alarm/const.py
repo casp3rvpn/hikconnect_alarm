@@ -2,7 +2,7 @@
 DOMAIN = "hikconnectAlarm"
 DEFAULT_NAME = "Hik-Connect Alarm"
 DEFAULT_SCAN_INTERVAL = 15  # seconds
-VERSION = "0.1.1"
+VERSION = "2.0.0"
 
 # Configuration keys
 CONF_USERNAME = "username"
