@@ -1,7 +1,8 @@
 """Constants for Hik-Connect integration."""
-DOMAIN = "hikconnect"
+DOMAIN = "hikconnectAlarm"
 DEFAULT_NAME = "Hik-Connect Alarm"
-DEFAULT_SCAN_INTERVAL = 30  # seconds
+DEFAULT_SCAN_INTERVAL = 15  # seconds
+VERSION = "0.1.0"
 
 # Configuration keys
 CONF_USERNAME = "username"
