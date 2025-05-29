@@ -1,4 +1,4 @@
 DOMAIN = "hikconnectAlarm"
 DEFAULT_PORT = 80
 DEFAULT_TIMEOUT = 10
-VERSION = "2.0.0"
+VERSION = "3.0.0"

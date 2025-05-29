@@ -1,7 +1,7 @@
 from homeassistant import config_entries
 from homeassistant.data_entry_flow import FlowResult
 import voluptuous as vol
-from hikconnect import HikConnect, AuthenticationError
+from hikconnect.hikconnect import HikVisionDevice
 from .const import DOMAIN, DEFAULT_PORT
 
 class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
@@ -15,9 +15,8 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
         if user_input is not None:
             try:
-                # Validate connection
-                device = HikConnect(
-                    ip=user_input["host"],
+                device = HikVisionDevice(
+                    host=user_input["host"],
                     username=user_input["username"],
                     password=user_input["password"],
                     port=user_input.get("port", DEFAULT_PORT)
@@ -26,13 +25,10 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 # Test connection
                 await self.hass.async_add_executor_job(device.get_device_info)
 
-                # Create entry
                 return self.async_create_entry(
-                    title=f"Hik-Connect {user_input['host']}",
+                    title=f"HikVision {user_input['host']}",
                     data=user_input
                 )
-            except AuthenticationError:
-                errors["base"] = "invalid_auth"
             except Exception as err:
                 errors["base"] = "cannot_connect"
 
